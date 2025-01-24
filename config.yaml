@@ -1,0 +1,13 @@
+app:
+  name: "gin-app"
+  version: "1.0.0"
+  port: 9000
+log:
+  level: "info"
+  format: "json"
+  output: "file"
+  filename: "app.log"
+  maxSize: 10
+  maxBackups: 3
+  maxAge: 28
+  compress: true
