@@ -14,10 +14,10 @@ func TestPingHandler(t *testing.T) {
 	r := gin.Default()
 
 	// 创建一个 PingHandler 实例
-	pingHandler := &PingHandler{}
+	pingHandler := &CheckHandler{}
 
 	// 注册路由和处理器
-	r.GET("/ping", pingHandler.Handle)
+	r.GET("/ping", pingHandler.Ping)
 
 	// 创建一个 HTTP 请求
 	req, _ := http.NewRequest("GET", "/ping", nil)
@@ -34,5 +34,4 @@ func TestPingHandler(t *testing.T) {
 	// 断言响应体
 	expectedBody := `{"message":"pong"}`
 	assert.JSONEq(t, expectedBody, w.Body.String())
-
 }

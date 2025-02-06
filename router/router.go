@@ -21,8 +21,8 @@ func newGinRouter() *GinRouter {
 }
 
 // register 注册路由处理器
-func (r *GinRouter) register(method string, path string, h handler.Handler) {
-	r.engine.Handle(method, path, h.Handle)
+func (r *GinRouter) register(method string, path string, h gin.HandlerFunc) {
+	r.engine.Handle(method, path, h)
 }
 
 // setup 实现路由设置
@@ -39,7 +39,12 @@ func register() *gin.Engine {
 	r := newGinRouter()
 	r.registerMiddleware(handler.RecoveryMiddleware())
 	r.registerMiddleware(handler.LoggerMiddleware())
-	r.register("GET", "/ping", &handler.PingHandler{})
+
+	// 注册路由
+	checkHandler := &handler.CheckHandler{}
+	r.register("GET", "/ping", checkHandler.Ping)
+	r.register("GET", "/check", checkHandler.Check)
+
 	return r.setup()
 }
 
