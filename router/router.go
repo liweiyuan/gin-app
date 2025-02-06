@@ -41,9 +41,17 @@ func register() *gin.Engine {
 	r.registerMiddleware(handler.LoggerMiddleware())
 
 	// 注册路由
-	checkHandler := &handler.CheckHandler{}
-	r.register("GET", "/ping", checkHandler.Ping)
-	r.register("GET", "/check", checkHandler.Check)
+	ping := &handler.PingEndpoint{}
+	r.register("GET", "/ping", ping.Ping)
+
+	check := &handler.CheckEndpoint{}
+	r.register("GET", "/check", check.Check)
+
+	user := &handler.UserEndpoint{}
+	r.register("GET", "/user/get", user.GetUser)
+	r.register("POST", "/user/create", user.CreateUser)
+	r.register("DELETE", "/user/delete", user.DeleteUser)
+	r.register("PUT", "/user/update", user.UpdateUser)
 
 	return r.setup()
 }

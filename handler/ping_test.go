@@ -14,10 +14,10 @@ func TestPingHandler(t *testing.T) {
 	r := gin.Default()
 
 	// 创建一个 PingHandler 实例
-	pingHandler := &CheckHandler{}
+	ping := &PingEndpoint{}
 
 	// 注册路由和处理器
-	r.GET("/ping", pingHandler.Ping)
+	r.GET("/ping", ping.Ping)
 
 	// 创建一个 HTTP 请求
 	req, _ := http.NewRequest("GET", "/ping", nil)
