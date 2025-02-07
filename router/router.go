@@ -1,9 +1,16 @@
 package router
 
 import (
+	"context"
 	"fmt"
 	"gin-app/config"
 	"gin-app/handler"
+	"gin-app/log"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -58,5 +65,27 @@ func register() *gin.Engine {
 
 func Serve() {
 	router := register()
-	router.Run(fmt.Sprintf(":%d", config.GlobalConfig.App.Port))
+	srv := &http.Server{
+		Addr:    fmt.Sprintf(":%d", config.GlobalConfig.App.Port),
+		Handler: router,
+	}
+	// 在一个新的goroutine中启动服务器
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Logger.Fatalf("listen: %s\n", err)
+		}
+	}()
+
+	// 等待中断信号以优雅地关闭服务器（设置 5 秒的超时时间）
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	log.Logger.Info("Shutting down server...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Logger.Fatal("Server forced to shutdown:", err)
+	}
+	log.Logger.Info("Server exiting")
 }
