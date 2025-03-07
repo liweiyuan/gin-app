@@ -11,7 +11,7 @@ import (
 
 var Logger = logrus.New()
 
-func init() {
+func Init() {
 	// 设置日志级别
 	level, err := logrus.ParseLevel(config.GlobalConfig.Log.Level)
 	if err != nil {
