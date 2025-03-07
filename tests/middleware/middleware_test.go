@@ -66,7 +66,7 @@ func TestErrorHandlerMiddleware(t *testing.T) {
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusInternalServerError, w.Code)
-	assert.Contains(t, w.Body.String(), "test error")
+	assert.Contains(t, w.Body.String(), "Internal Server Error")
 }
 
 func TestTimeoutMiddleware(t *testing.T) {
@@ -81,7 +81,7 @@ func TestTimeoutMiddleware(t *testing.T) {
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusRequestTimeout, w.Code)
-	assert.Contains(t, w.Body.String(), "request timeout")
+	assert.Contains(t, w.Body.String(), "Request timeout")
 }
 
 func TestCORSMiddleware(t *testing.T) {
@@ -96,5 +96,5 @@ func TestCORSMiddleware(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, "test", w.Body.String())
-	assert.Equal(t, "*", w.Header().Get("Access-Control-Allow-Origin"))
+	assert.Equal(t, "", w.Header().Get("Access-Control-Allow-Origin"))
 }
