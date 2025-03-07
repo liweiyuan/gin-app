@@ -40,13 +40,16 @@ func LoggerMiddleware() gin.HandlerFunc {
 					"method": c.Request.Method,
 				}).Error("HTTP error occurred")
 			}
-		} else if c.Writer.Status() >= http.StatusBadRequest {
-			// 记录非 2xx 的响应
-			log.Logger.WithFields(logrus.Fields{
-				"status": c.Writer.Status(),
-				"path":   c.Request.URL.Path,
-				"method": c.Request.Method,
-			}).Warn("Non-2xx response")
+		} else {
+			status := c.Writer.Status()
+			if status >= http.StatusBadRequest {
+				// Log non-2xx responses
+				log.Logger.WithFields(logrus.Fields{
+					"status": status,
+					"path":   c.Request.URL.Path,
+					"method": c.Request.Method,
+				}).Warn("Non-2xx response")
+			}
 		}
 	}
 }

@@ -19,12 +19,12 @@ type User struct {
 	Age  int    `json:"age"`
 }
 
-// 模拟的用户数据库
 var users = map[int]User{
+	// Consider using a database or some other persistent storage instead of an in-memory map
 	1: {ID: 1, Name: "张三", Age: 20},
 }
 
-// logRequest 记录请求日志
+// logRequest logs HTTP request details
 func logRequest(c *gin.Context, action string) {
 	log.Logger.WithFields(logrus.Fields{
 		"method": c.Request.Method,

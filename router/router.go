@@ -15,15 +15,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GinRouter
 type GinRouter struct {
 	engine *gin.Engine
 }
 
-// newGinRouter 创建新的GinRouter实例
+// newGinRouter creates a new GinRouter instance
 func newGinRouter() *GinRouter {
 	return &GinRouter{
-		engine: gin.Default(),
+		engine: gin.New(), // Use gin.New() so you can manually add middlewares in order
 	}
 }
 

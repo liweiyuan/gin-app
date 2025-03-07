@@ -27,7 +27,10 @@ func init() {
 		Logger.SetFormatter(&logrus.TextFormatter{})
 	}
 
-	// 设置日志输出
+	if err := os.MkdirAll("logs", os.ModePerm); err != nil {
+		logrus.Fatalf("Could not create log directory: %v", err)
+	}
+
 	switch config.GlobalConfig.Log.Output {
 	case "stdout":
 		Logger.Out = os.Stdout
